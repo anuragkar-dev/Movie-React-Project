@@ -1,31 +1,60 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import { useAuthContext } from "./AuthContext";  // Import AuthContext
 
 const MovieContext = createContext();
 
 export const useMovieContext = () => useContext(MovieContext);
 
 export const MovieProvider = ({ children }) => {
+  const { user } = useAuthContext();  // Access user from AuthContext
   const [favorites, setFavorites] = useState([]);
 
+  // Fetch favorites from the backend when the user is logged in
   useEffect(() => {
-    const storedFavs = localStorage.getItem("favorites");
-    if (storedFavs) {
-      setFavorites(JSON.parse(storedFavs));
+    if (user) {
+      fetchFavorites();
     }
-  }, []);
+  }, [user]);
 
-  useEffect(() => {
-    if (favorites.length > 0) {
-      localStorage.setItem("favorites", JSON.stringify(favorites));
+  const fetchFavorites = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/favorites/${user.uid}`);
+      const data = await response.json();
+      setFavorites(data);
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
     }
-  }, [favorites]);
-
-  const addToFavorites = (movie) => {
-    setFavorites((prev) => [...prev, movie]);
   };
 
-  const removeFromFavorites = (movieId) => {
-    setFavorites((prev) => prev.filter((movie) => movie.id !== movieId));
+  const addToFavorites = async (movie) => {
+    try {
+      await fetch("http://localhost:5000/favorites", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.uid,  // Use Firebase user UID for identification
+          movieId: movie.id,
+          title: movie.title,
+          poster: movie.poster_path,
+        }),
+      });
+      setFavorites((prev) => [...prev, movie]);
+    } catch (error) {
+      console.error("Error adding favorite:", error);
+    }
+  };
+
+  const removeFromFavorites = async (movieId) => {
+    try {
+      await fetch(`http://localhost:5000/favorites/${user.uid}/${movieId}`, {
+        method: "DELETE",
+      });
+      setFavorites((prev) => prev.filter((movie) => movie.id !== movieId));
+    } catch (error) {
+      console.error("Error removing favorite:", error);
+    }
   };
 
   const isFavorite = (movieId) => {
