@@ -18,7 +18,7 @@ function NavBar() {
         <Link to="/" className="nav-link">Home</Link>
         <Link to="/favorites" className="nav-link">Favorites</Link>
         {user ? (
-          <button onClick={handleLogout} className="logout-button">Logout</button>
+          <Link to="/" onClick={handleLogout} className="nav-link">Logout</Link>
         ) : (
           <Link to="/login" className="nav-link">Login</Link>
         )}
