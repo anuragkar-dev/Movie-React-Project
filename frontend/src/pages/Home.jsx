@@ -1,6 +1,6 @@
 import MovieCard from "../components/MovieCard"
 import { useState, useEffect } from "react"
-import {searchMovies, getPopularMovies} from "../services/api"
+import { searchMovies, getPopularMovies } from "../services/api"
 import '../css/Home.css'
 
 function Home () {
@@ -8,6 +8,7 @@ function Home () {
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [searching, setSearching] = useState(false); // State to track search
 
     useEffect(() => {
         const loadPopularMovies = async () => {
@@ -38,12 +39,31 @@ function Home () {
             const searchResults = await searchMovies(searchQuery)
             setMovies(searchResults)
             setError(null)
+            setSearching(true) // Indicate that search results are shown
         } catch (error) {
             console.log(error)
         }
         finally {
             setLoading(false)
         }
+    }
+
+    const handleBackToPopular = () => {
+        setSearching(false)
+        setSearchQuery("")
+        setLoading(true)
+        const loadPopularMovies = async () => {
+            try {
+                const popularMovies = await getPopularMovies()
+                setMovies(popularMovies)
+            } catch (err) {
+                console.log(err)
+                setError("Failed to load movies.")
+            } finally {
+                setLoading(false)
+            }
+        }
+        loadPopularMovies()
     }
 
     return (
@@ -63,10 +83,17 @@ function Home () {
             {loading ? (
                 <div className="loading">Loading...</div>
             ) : (
-                <div className="movies-grid">
-                    {movies.map((movie) => (
-                        <MovieCard movie={movie} key={movie.id} />
-                    ))}
+                <div>
+                    {searching && (
+                        <button onClick={handleBackToPopular} className="back-to-popular-button">
+                            Back to Popular Movies
+                        </button>
+                    )}
+                    <div className="movies-grid">
+                        {movies.map((movie) => (
+                            <MovieCard movie={movie} key={movie.id} />
+                        ))}
+                    </div>
                 </div>
             )}
         </div>
