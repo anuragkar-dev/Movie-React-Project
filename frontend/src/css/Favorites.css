@@ -33,7 +33,6 @@
   line-height: 1.6;
 }
 
-
 /* Animation for new favorites being added */
 @keyframes fadeIn {
   from {
@@ -48,19 +47,40 @@
 
 .movies-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Default to multiple columns */
   gap: 1.5rem;
   padding: 1rem;
   width: 100%;
   box-sizing: border-box;
 }
 
-
 .movies-grid > * {
   animation: fadeIn 0.3s ease-out forwards;
 }
 
+/* Ensure the grid layout is well adjusted for only one item */
+.favorites .movies-grid {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Default grid */
+}
 
+.favorites .movies-grid > * {
+  /* If there is only one favorite, make sure it is centered and smaller */
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.favorites .movies-grid:only-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.favorites .movies-grid:only-child > * {
+  max-width: 500px;
+  transform: scale(0.9);  /* Optional: slightly shrink the card */
+}
+
+/* Responsiveness for small screens */
 @media (max-width: 639px) {
   .home {
     padding: 1rem 0;
@@ -69,26 +89,8 @@
   .search-form {
     margin-bottom: 1rem;
   }
-}
 
-.movies-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  padding: 1rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-
-
-.movies-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns */
-  gap: 1.5rem;
-  padding: 1rem;
-  width: 100%;
-  box-sizing: border-box;
-  max-height: 1200px; /* Prevent it from growing too tall */
-  overflow: hidden;
+  .favorites h2 {
+    font-size: 2rem;
+  }
 }

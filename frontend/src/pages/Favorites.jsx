@@ -3,16 +3,16 @@ import { useMovieContext } from '../contexts/MovieContext';
 import MovieCard from '../components/MovieCard';
 
 function Favorites() {
-    const {favorites} = useMovieContext()
+    const { favorites } = useMovieContext()
 
-    return (favorites) ?
+    return (favorites && favorites.length > 0) ?
     (
         <div className="favorites">
-        <h2>Your Favorites</h2>
+            <h2>Your Favorites</h2>
             <div className="movies-grid">
-            {favorites.map((movie) => (
-                <MovieCard movie={movie} key={movie.id} />
-            ))}
+                {favorites.map((movie) => (
+                    <MovieCard movie={movie} key={movie.id} />
+                ))}
             </div>
         </div>
     )

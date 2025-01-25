@@ -30,7 +30,7 @@
 
 .search-button {
   padding: 0.75rem 1.5rem;
-  background-color: #e50914;
+  background-color: #5d48ff;
   color: white;
   border-radius: 4px;
   font-weight: 500;
@@ -39,7 +39,7 @@
 }
 
 .search-button:hover {
-  background-color: #f40612;
+  background-color: #6c5ce7;
 }
 
 
@@ -60,4 +60,23 @@
   padding: 1rem;
   width: 100%;
   box-sizing: border-box;
+}
+
+.back-to-popular-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #333;
+  color: white;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+  margin-top: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.back-to-popular-button:hover {
+  background-color: #555;
 }
